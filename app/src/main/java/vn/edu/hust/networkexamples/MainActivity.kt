@@ -7,12 +7,19 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -48,15 +55,42 @@ class MainActivity : AppCompatActivity() {
 //            Log.v("TAG", "$it - $name - $age - $gender")
 //        }
 
-        val jObj = JSONObject()
-        jObj.put("name", "Le Ba Vui")
-        jObj.put("email", "vui.leba@hust.edu.vn")
-        val jAddress = JSONObject()
-        jAddress.put("school", "SoICT")
-        jAddress.put("office", "B1")
-        jObj.put("address", jAddress)
-        val jsonString = jObj.toString()
-        Log.v("TAG", jsonString)
+//        val jObj = JSONObject()
+//        jObj.put("name", "Le Ba Vui")
+//        jObj.put("email", "vui.leba@hust.edu.vn")
+//        val jAddress = JSONObject()
+//        jAddress.put("school", "SoICT")
+//        jAddress.put("office", "B1")
+//        jObj.put("address", jAddress)
+//        val jsonString = jObj.toString()
+//        Log.v("TAG", jsonString)
+
+        val moshi = Moshi.Builder()
+            .add((KotlinJsonAdapterFactory()))
+            .build()
+        val retrofit = Retrofit.Builder()
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .baseUrl("https://jsonplaceholder.typicode.com/")
+            .build()
+        val myService = retrofit.create(MyService::class.java)
+
+        lifecycleScope.launch(Dispatchers.IO) {
+//            val allPosts = myService.getAllPost()
+//            Log.v("TAG", "Num posts: ${allPosts.size}")
+//            for (post in allPosts) {
+//                Log.v("TAG", post.title)
+//            }
+
+            val post = myService.getPost(1)
+            Log.v("TAG", post.title)
+        }
+
+        Glide.with(this)
+            .load("https://lebavui.github.io/walls/wall.jpg")
+            .apply(RequestOptions()
+                .placeholder(R.drawable.baseline_downloading_24)
+                .error(R.drawable.baseline_error_outline_24))
+            .into(findViewById<ImageView>(R.id.imageView))
     }
 
     fun sendGet() {
