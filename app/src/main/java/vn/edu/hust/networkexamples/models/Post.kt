@@ -1,4 +1,4 @@
-package vn.edu.hust.networkexamples
+package vn.edu.hust.networkexamples.models
 
 import com.squareup.moshi.JsonClass
 

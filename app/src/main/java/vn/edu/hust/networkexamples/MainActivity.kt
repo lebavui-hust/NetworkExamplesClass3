@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity() {
 
         val retrofit = Retrofit.Builder()
             .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .baseUrl("https://jsonplaceholder.typicode.com/")
+            .baseUrl("https://lebavui.github.io/jsons/")
             .build()
 
         val myService = retrofit.create(MyService::class.java)
@@ -85,17 +85,27 @@ class MainActivity : AppCompatActivity() {
 //            for (post in posts) {
 //                Log.v("TAG", post.title)
 //            }
-            val post = myService.findPost(10)
-            Log.v("TAG", post.title)
+
+//            val post = myService.findPost(10)
+//            Log.v("TAG", post.title)
+
+            val users = myService.getAllUsers()
+            for (user in users) {
+                Log.v("TAG", user.name)
+                Log.v("TAG", user.email)
+                Log.v("TAG", user.avatar.thumbnail)
+                Log.v("TAG", user.address.street + ", " + user.address.city)
+                Log.v("TAG", user.address.geo.lat + ", " + user.address.geo.lng)
+            }
         }
 
 
-        val imageView = findViewById<ImageView>(R.id.imageView)
-        Glide.with(this).load("https://lebavui.github.io/walls/wall.jpg")
-            .apply(RequestOptions()
-                .placeholder(R.drawable.baseline_downloading_24)
-                .error(R.drawable.baseline_error_outline_24))
-            .into(imageView)
+//        val imageView = findViewById<ImageView>(R.id.imageView)
+//        Glide.with(this).load("https://lebavui.github.io/walls/wall.jpg")
+//            .apply(RequestOptions()
+//                .placeholder(R.drawable.baseline_downloading_24)
+//                .error(R.drawable.baseline_error_outline_24))
+//            .into(imageView)
     }
 
     fun sendGet() {
