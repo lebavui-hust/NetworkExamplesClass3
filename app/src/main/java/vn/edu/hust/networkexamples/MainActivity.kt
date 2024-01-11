@@ -1,6 +1,8 @@
 package vn.edu.hust.networkexamples
 
 import android.app.ProgressDialog
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import androidx.appcompat.app.AppCompatActivity
@@ -65,32 +67,35 @@ class MainActivity : AppCompatActivity() {
 //        val jsonString = jObj.toString()
 //        Log.v("TAG", jsonString)
 
+
         val moshi = Moshi.Builder()
-            .add((KotlinJsonAdapterFactory()))
+            .add(KotlinJsonAdapterFactory())
             .build()
+
         val retrofit = Retrofit.Builder()
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .baseUrl("https://jsonplaceholder.typicode.com/")
             .build()
+
         val myService = retrofit.create(MyService::class.java)
 
         lifecycleScope.launch(Dispatchers.IO) {
-//            val allPosts = myService.getAllPost()
-//            Log.v("TAG", "Num posts: ${allPosts.size}")
-//            for (post in allPosts) {
+//            val posts = myService.listAllPosts()
+//            Log.v("TAG", "Num posts: ${posts.size}")
+//            for (post in posts) {
 //                Log.v("TAG", post.title)
 //            }
-
-            val post = myService.getPost(1)
+            val post = myService.findPost(10)
             Log.v("TAG", post.title)
         }
 
-        Glide.with(this)
-            .load("https://lebavui.github.io/walls/wall.jpg")
+
+        val imageView = findViewById<ImageView>(R.id.imageView)
+        Glide.with(this).load("https://lebavui.github.io/walls/wall.jpg")
             .apply(RequestOptions()
                 .placeholder(R.drawable.baseline_downloading_24)
                 .error(R.drawable.baseline_error_outline_24))
-            .into(findViewById<ImageView>(R.id.imageView))
+            .into(imageView)
     }
 
     fun sendGet() {

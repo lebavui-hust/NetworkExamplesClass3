@@ -5,8 +5,8 @@ import retrofit2.http.Path
 
 interface MyService {
     @GET("posts")
-    suspend fun getAllPost(): List<Post>
+    suspend fun listAllPosts(): List<Post>
 
     @GET("posts/{postId}")
-    suspend fun getPost(@Path("postId") postId: Int): Post
+    suspend fun findPost(@Path("postId") postId: Int): Post
 }
